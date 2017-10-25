@@ -1,0 +1,84 @@
+$integration: 'http://ibm.com/appconnect/integration/v2/integrationFile'
+integration:
+  type: api
+  trigger-interfaces:
+    trigger-interface-1:
+      triggers:
+        retrieveContact:
+          assembly:
+            $ref: '#/integration/assemblies/assembly-1'
+          input-context:
+            data: contact
+          output-context:
+            data: contact
+      options:
+        resources:
+          - business-object: contact
+            model:
+              $ref: '#/models/contact'
+            triggers:
+              retrieve: retrieveContact
+      type: api-trigger
+  action-interfaces:
+    action-interface-1:
+      type: api-action
+      business-object: Contact
+      connector-type: salesforce
+      actions:
+        RETRIEVEALL: {}
+  assemblies:
+    assembly-1:
+      assembly:
+        execute:
+          - retrieve-action:
+              name: Salesforce Retrieve Contact
+              target:
+                $ref: '#/integration/action-interfaces/action-interface-1'
+              filter:
+                where:
+                  Name: '{{$api.name}}'
+                input:
+                  - variable: api
+                    $ref: '#/trigger/api/parameters'
+                limit: 1
+              allow-empty-output: false
+              allow-truncation: false
+          - response:
+              name: response-1
+              reply-maps:
+                - title: contact successfully retrieved
+                  status-code: 200
+                  map:
+                    $map: 'http://ibm.com/appconnect/map/v1'
+                    input:
+                      - variable: api
+                        $ref: '#/trigger/api/parameters'
+                      - variable: SalesforceRetrieveContact
+                        $ref: >-
+                          #/node-output/Salesforce Retrieve
+                          Contact/response/payload
+                      - variable: SalesforceRetrieveContactMetadata
+                        $ref: '#/node-output/Salesforce Retrieve Contact/response'
+                    mappings:
+                      - email:
+                          template: '{{$SalesforceRetrieveContact.Email}}'
+                      - name:
+                          template: '{{$SalesforceRetrieveContact.Name}}'
+                  input: []
+  name: Get Contact from Salesforce and some other words that make the name longer up to one hundred char
+models:
+  contact:
+    name: contact
+    properties:
+      name:
+        type: string
+        required: false
+        id: true
+      email:
+        type: string
+        required: false
+        id: false
+    plural: contact
+    description: ' '
+    operations:
+      retrieve: '#/integration/assemblies/assembly-1'
