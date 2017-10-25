@@ -1,6 +1,6 @@
 {
   "templates": [{
-    "name": "Create contact from Salesforce lead",
+    "name": "Create contact from Salesforce lead and other things that make the name longer but not too long",
     "description": "Creates a contact when a new lead is added in Salesforce.",
     "summary": "Salesforce to 2 applications",
     "sourceApp": "salesforce",
