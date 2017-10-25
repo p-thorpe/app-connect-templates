@@ -17,5 +17,14 @@
     "instructions": "Click the Create flow button to create a flow based on this template. It will open in the flow editor.",
     "tags": ["Slack", "Asana", "message", "task"],
     "offerings": ["app connect professional"]
+  }, {
+    "name": "Get Contact from Salesforce and some other words that make the name longer up to one hundred char",
+    "description": "Creates a contact in Salesforce.",
+    "summary": "Api to Salesforce",
+    "sourceApp": "api",
+    "targetApps": ["salesforce"],
+    "instructions": "Click the Create flow button to create a flow based on this template. It will open in the api editor.",
+    "tags": ["Salesforce", "contact"],
+    "offerings": ["app connect professional"]
   }]
 }
